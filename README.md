@@ -6,8 +6,6 @@ Neovimから離れることなく、コマンドラインや選択したコー�
 
 - **`:Tweet "テキスト"`** : コマンドラインから素早くポスト
 - **`:TweetSelection`** : Visualモードで選択した範囲（コードや文章）をポスト
-- **安全な設計** : APIキーは `.env` ファイルで管理（Gitには含まれません）
-- **環境分離** : 専用の仮想環境 (`.venv`) を使用するため、環境エラーが発生しません
 
 ## 📦 前提条件
 
@@ -20,7 +18,6 @@ Neovimから離れることなく、コマンドラインや選択したコー�
 ### 1. プラグイン設定 (lazy.nvim)
 
 `lazy.nvim` の設定に以下を追加してください。
-`YOUR_GITHUB_USERNAME` はあなたのユーザー名に書き換えてください。
 
 ```lua
 return {
@@ -85,10 +82,13 @@ ACCESS_SECRET=your_access_secret
 ## ❓ トラブルシューティング
 
 **Q. `Error: 403 Forbidden`**
+
 A. 権限不足です。Developer Portalで `App permissions` を **Read and Write** にし、Access Tokenを**再生成**して `.env` に書き直してください。
 
 **Q. `API Keys are missing`**
+
 A. `.env` の場所が間違っています。`scripts` フォルダ内にあるか確認してください。
 
 **Q. `module 'tweepy' not found`**
+
 A. 仮想環境の準備不足です。「インストール方法」の手順2を実行してください。
