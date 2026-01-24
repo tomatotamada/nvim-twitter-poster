@@ -8,7 +8,7 @@ end
 
 function M.setup()
 	local script_path = get_script_path()
-	local python_exec = script_path:gsub("scripts/tweet.py", "venv/bin/python3")
+	local python_exec = script_path:gsub("scripts/tweet.py", "venv/bin/python")
 
 	vim.api.nvim_create_user_command("Tweet", function(opts)
 		local content = opts.args
