@@ -8,10 +8,11 @@ end
 
 function M.setup()
 	local script_path = get_script_path()
+	local python_exec = script_path:gsub("scripts/tweet.py", "venv/bin/python3")
 
 	vim.api.nvim_create_user_command("Tweet", function(opts)
 		local content = opts.args
-		local cmd = string.format("python3 '%s' '%s'", script_path, content:gsub("'", "'\\''"))
+		local cmd = string.format("'%s' '%s' '%s'", python_path, script_path, content:gsub("'", "'\\''"))
 
 		vim.fn.jobstart(cmd, {
 			on_exit = function(_, code)
@@ -45,7 +46,7 @@ function M.setup()
 			return
 		end
 
-		local cmd = string.format("python3 '%s' '%s'", script_path, text:gsub("'", "'\\''"))
+		local cmd = string.format("'%s' '%s' '%s'", script_path, text:gsub("'", "'\\''"))
 
 		vim.fn.jobstart(cmd, {
 			on_exit = function(_, code)
