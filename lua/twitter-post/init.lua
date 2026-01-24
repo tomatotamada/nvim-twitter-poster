@@ -8,11 +8,13 @@ end
 
 function M.setup()
 	local script_path = get_script_path()
-	local python_exec = script_path:gsub("scripts/tweet.py", "venv/bin/python")
+
+	local python_exec = script_path:gsub("tweet.py", ".venv/bin/python")
 
 	vim.api.nvim_create_user_command("Tweet", function(opts)
 		local content = opts.args
-		local cmd = string.format("'%s' '%s' '%s'", python_path, script_path, content:gsub("'", "'\\''"))
+
+		local cmd = string.format("'%s' '%s' '%s'", python_exec, script_path, content:gsub("'", "'\\''"))
 
 		vim.fn.jobstart(cmd, {
 			on_exit = function(_, code)
@@ -20,6 +22,15 @@ function M.setup()
 					print("Twitterに投稿しました！ 🐦")
 				else
 					print("投稿に失敗しました... (.envやライブラリを確認してください)")
+				end
+			end,
+			on_stderr = function(_, data)
+				if data then
+					for _, line in ipairs(data) do
+						if line ~= "" then
+							print("Error: " .. line)
+						end
+					end
 				end
 			end,
 		})
@@ -46,7 +57,7 @@ function M.setup()
 			return
 		end
 
-		local cmd = string.format("'%s' '%s' '%s'", script_path, text:gsub("'", "'\\''"))
+		local cmd = string.format("'%s' '%s' '%s'", python_exec, script_path, text:gsub("'", "'\\''"))
 
 		vim.fn.jobstart(cmd, {
 			on_exit = function(_, code)
@@ -54,6 +65,15 @@ function M.setup()
 					print("選択範囲をTweetしました！ 🐦")
 				else
 					print("Tweet失敗...")
+				end
+			end,
+			on_stderr = function(_, data)
+				if data then
+					for _, line in ipairs(data) do
+						if line ~= "" then
+							print("Error: " .. line)
+						end
+					end
 				end
 			end,
 		})
