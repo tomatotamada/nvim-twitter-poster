@@ -4,14 +4,21 @@ Neovimから離れることなく、コマンドラインや選択したコー�
 
 ## ✨ 特徴
 
-- **`:Tweet "テキスト"`** : コマンドラインから素早くポスト
-- **`:TweetSelection`** : Visualモードで選択した範囲（コードや文章）をポスト
+- **`:Tweet "テキスト"`** : コマンドラインから素早くポスト（API使用）
+- **`:TweetSelection`** : Visualモードで選択した範囲をポスト（API使用）
+- **`:TweetIntent "テキスト"`** : ブラウザでツイート画面を開く（APIキー不要）
+- **`:TweetIntentSelection`** : 選択範囲をブラウザで開く（APIキー不要）
 
 ## 📦 前提条件
 
 - Neovim (v0.8.0以上)
+
+**API版 (`:Tweet`, `:TweetSelection`) を使う場合:**
 - Python 3.x
 - X (Twitter) Developer Account (Free TierでOK)
+
+**Web Intent版 (`:TweetIntent`, `:TweetIntentSelection`) を使う場合:**
+- 追加の設定は不要です
 
 ## 🚀 インストール方法
 
@@ -22,17 +29,20 @@ Neovimから離れることなく、コマンドラインや選択したコー�
 ```lua
 return {
   "tomatotamada/nvim-twitter-poster",
-  cmd = { "Tweet", "TweetSelection" },
+  cmd = { "Tweet", "TweetSelection", "TweetIntent", "TweetIntentSelection" },
   config = function()
     require("twitter-post").setup()
   end,
   keys = {
-    { "<leader>tw", ":TweetSelection<CR>", mode = "v", desc = "Tweet Selection" },
+    { "<leader>tw", ":TweetSelection<CR>", mode = "v", desc = "Tweet Selection (API)" },
+    { "<leader>ti", ":TweetIntentSelection<CR>", mode = "v", desc = "Tweet Selection (Browser)" },
   }
 }
 ```
 
-### 2. Python環境のセットアップ (必須)
+### 2. Python環境のセットアップ (API版を使う場合のみ)
+
+> **Note:** `:TweetIntent` / `:TweetIntentSelection` のみ使う場合、この手順は不要です。
 
 インストール後、ターミナルで以下のコマンドを1回だけ実行してください。
 
@@ -46,7 +56,9 @@ python3 -m venv .venv
 ./.venv/bin/pip install tweepy python-dotenv
 ```
 
-## 🔑 APIキーの設定
+## 🔑 APIキーの設定 (API版を使う場合のみ)
+
+> **Note:** `:TweetIntent` / `:TweetIntentSelection` のみ使う場合、この手順は不要です。
 
 ### 1. Developer Portalでの設定
 X Developer Portalで、**App permissions** が **「Read and Write」** になっていることを確認してください。
@@ -66,17 +78,27 @@ ACCESS_SECRET=your_access_secret
 
 ## 📝 使い方
 
-### コマンドラインから投稿
+### API版（完全自動投稿）
+
 ```vim
+" コマンドラインから投稿
 :Tweet 今日はNeovimで開発中！ 🚀
+
+" 選択範囲を投稿 (Visual Mode)
+:'<,'>TweetSelection
 ```
 
-### 選択範囲を投稿 (Visual Mode)
-1. `v` でテキストを選択
-2. コマンドを実行
+### Web Intent版（APIキー不要）
+
+ブラウザでツイート画面が開き、テキストが入力された状態になります。
+最後に「ポスト」ボタンを押して投稿を完了します。
 
 ```vim
-:'<,'>TweetSelection
+" コマンドラインから
+:TweetIntent 今日はNeovimで開発中！ 🚀
+
+" 選択範囲を投稿 (Visual Mode)
+:'<,'>TweetIntentSelection
 ```
 
 ## ❓ トラブルシューティング
